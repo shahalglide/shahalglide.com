@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shahal Glide | Heavy Development</title>
+<title>Shahal Glide | Under Heavy Development</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{
@@ -15,181 +15,154 @@
 }
 
 body{
-  font-family:'Orbitron', sans-serif;
+  font-family:'Space Grotesk', sans-serif;
   height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(-45deg,#0f0c29,#302b63,#24243e,#0f2027);
+  background-size:400% 400%;
+  animation:gradientShift 15s ease infinite;
   overflow:hidden;
-  background:#0f0f0f;
   color:white;
 }
 
-/* Animated Gradient Background */
-body::before{
-  content:"";
-  position:absolute;
-  width:200%;
-  height:200%;
-  background:linear-gradient(
-    45deg,
-    #ff00cc,
-    #3333ff,
-    #00ffee,
-    #ff9900
-  );
-  animation: gradientMove 12s ease infinite;
-  background-size:400% 400%;
-  z-index:-2;
-  filter: blur(120px);
-}
-
-@keyframes gradientMove{
+@keyframes gradientShift{
   0%{background-position:0% 50%;}
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
 
-/* Particle Canvas */
-canvas{
+/* Floating Orbs */
+.orb{
   position:absolute;
-  top:0;
-  left:0;
-  z-index:-1;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:0.6;
+  animation:float 10s infinite ease-in-out alternate;
 }
 
-/* Center Content */
-.container{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:20px;
-}
-
-/* Animated Heading */
-h1{
-  font-size:3rem;
-  letter-spacing:4px;
-  text-transform:uppercase;
-  animation: glitch 1.5s infinite;
-}
-
-@keyframes glitch{
-  0%{text-shadow:2px 2px #ff00cc;}
-  50%{text-shadow:-2px -2px #00ffee;}
-  100%{text-shadow:2px -2px #ff9900;}
-}
-
-/* Subtitle */
-p{
-  margin-top:20px;
-  font-size:1.2rem;
-  opacity:0.8;
-}
-
-/* Animated Loader Bar */
-.loader{
-  margin-top:40px;
+.orb1{
   width:300px;
-  height:6px;
-  background:rgba(255,255,255,0.1);
-  overflow:hidden;
-  border-radius:5px;
+  height:300px;
+  background:#ff00cc;
+  top:10%;
+  left:10%;
 }
 
-.loader span{
-  display:block;
-  height:100%;
-  width:40%;
-  background:linear-gradient(90deg,#ff00cc,#00ffee);
-  animation: loading 2s infinite;
+.orb2{
+  width:350px;
+  height:350px;
+  background:#00ffee;
+  bottom:10%;
+  right:10%;
+  animation-delay:2s;
 }
 
-@keyframes loading{
-  0%{transform:translateX(-100%);}
-  100%{transform:translateX(300%);}
+@keyframes float{
+  from{transform:translateY(-30px);}
+  to{transform:translateY(30px);}
 }
 
-/* Countdown */
-.countdown{
-  margin-top:30px;
-  font-size:1rem;
+/* Glass Card */
+.card{
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.08);
+  padding:50px 30px;
+  border-radius:20px;
+  text-align:center;
+  width:90%;
+  max-width:500px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  animation:fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+h1{
+  font-size:2.2rem;
+  margin-bottom:15px;
+}
+
+p{
+  opacity:0.8;
+  margin-bottom:30px;
+}
+
+/* Progress Ring */
+.progress{
+  width:120px;
+  height:120px;
+  margin:0 auto 25px;
+  position:relative;
+}
+
+.progress svg{
+  transform:rotate(-90deg);
+}
+
+.progress circle{
+  fill:none;
+  stroke-width:8;
+  stroke-linecap:round;
+}
+
+.progress .bg{
+  stroke:rgba(255,255,255,0.2);
+}
+
+.progress .meter{
+  stroke:url(#grad);
+  stroke-dasharray:314;
+  stroke-dashoffset:314;
+  animation:load 4s infinite ease-in-out;
+}
+
+@keyframes load{
+  0%{stroke-dashoffset:314;}
+  50%{stroke-dashoffset:120;}
+  100%{stroke-dashoffset:314;}
+}
+
+.status{
+  font-size:0.9rem;
   opacity:0.7;
+}
+
+/* Responsive */
+@media(max-width:480px){
+  h1{font-size:1.7rem;}
+  .card{padding:40px 20px;}
 }
 </style>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
 
-<div class="container">
+<div class="card">
   <h1>Heavy Development</h1>
-  <p>This site is evolving into something futuristic and powerful.</p>
+  <p>This digital experience is being carefully crafted into something powerful.</p>
 
-  <div class="loader">
-    <span></span>
+  <div class="progress">
+    <svg width="120" height="120">
+      <defs>
+        <linearGradient id="grad">
+          <stop offset="0%" stop-color="#ff00cc"/>
+          <stop offset="100%" stop-color="#00ffee"/>
+        </linearGradient>
+      </defs>
+      <circle class="bg" cx="60" cy="60" r="50"></circle>
+      <circle class="meter" cx="60" cy="60" r="50"></circle>
+    </svg>
   </div>
 
-  <div class="countdown" id="countdown"></div>
+  <div class="status">Reimagining. Designing. Building.</div>
 </div>
-
-<script>
-/* Particle Background */
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for(let i=0;i<80;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    size:Math.random()*2,
-    speed:Math.random()*0.5+0.2
-  });
-}
-
-function animateParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="white";
-
-  particles.forEach(p=>{
-    p.y += p.speed;
-    if(p.y>canvas.height) p.y=0;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-    ctx.fill();
-  });
-
-  requestAnimationFrame(animateParticles);
-}
-
-animateParticles();
-
-/* Countdown (auto 30 days from now) */
-let launchDate = new Date();
-launchDate.setDate(launchDate.getDate()+30);
-
-function updateCountdown(){
-  let now = new Date();
-  let diff = launchDate - now;
-
-  let days = Math.floor(diff/(1000*60*60*24));
-  let hours = Math.floor((diff/(1000*60*60))%24);
-  let minutes = Math.floor((diff/1000/60)%60);
-  let seconds = Math.floor((diff/1000)%60);
-
-  document.getElementById("countdown").innerHTML =
-    `Launching in ${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-  setTimeout(updateCountdown,1000);
-}
-
-updateCountdown();
-</script>
 
 </body>
 </html>
