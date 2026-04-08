@@ -10,112 +10,98 @@
 <style>
 
 /* ---------------- BASE ---------------- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  background: #000;
-  color: #fff;
+  background: radial-gradient(circle at 50% 20%, #0a0a0a, #000);
   font-family: 'Inter', sans-serif;
   overflow: hidden;
+  color: #eaeaea;
 }
 
-/* ---------------- CANVAS (LINES + CINEMATIC) ---------------- */
+/* CANVAS */
 canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top:0; left:0;
+  width:100%;
+  height:100%;
 }
 
-/* ---------------- MAIN CONTENT ---------------- */
+/* CONTENT */
 .container {
   position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 50%;
+  width:100%;
+  top:50%;
   transform: translateY(-50%);
+  text-align:center;
   padding: 0 20px;
-  opacity: 0;
+  pointer-events:none;
 }
 
-/* TEXTS */
+/* TEXT */
 .title {
-  font-size: clamp(28px, 6vw, 52px);
-  font-weight: 600;
+  font-size: clamp(28px, 6vw, 60px);
+  font-weight:600;
   letter-spacing: 2px;
-  opacity: 0;
+  opacity:0;
 }
 
 .subtitle {
-  margin-top: 12px;
+  margin-top:12px;
   font-size: clamp(14px, 3.5vw, 18px);
-  color: #aaa;
-  opacity: 0;
+  color:#9ca3af;
+  opacity:0;
 }
 
 /* PROGRESS */
-.progress-wrap {
-  margin-top: 40px;
-  width: 120px;
-  height: 120px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  opacity: 0;
+.progress {
+  margin:40px auto 0;
+  width:100px;
+  height:100px;
+  position:relative;
+  opacity:0;
 }
 
-.progress-circle {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.1);
-  position: absolute;
+.progress svg {
+  transform: rotate(-90deg);
 }
 
-.progress-fill {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px solid white;
-  border-top-color: transparent;
-  animation: spin 1.2s linear infinite;
+.progress circle {
+  fill:none;
+  stroke-width:2;
+  stroke:#333;
+}
+
+.progress .active {
+  stroke:#eaeaea;
+  stroke-dasharray:314;
+  stroke-dashoffset:314;
+  animation: draw 2s ease forwards;
+}
+
+@keyframes draw {
+  to { stroke-dashoffset:0; }
 }
 
 /* IDLE LOOP */
-.idle .progress-fill {
-  animation: spinSlow 6s linear infinite;
+.idle .active {
+  animation: spin 8s linear infinite;
+  stroke-dashoffset:0;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-@keyframes spinSlow {
-  to { transform: rotate(360deg); }
-}
-
-/* FADE + BLUR CONTROL */
+/* BLUR */
 .blur {
-  filter: blur(10px);
+  filter: blur(12px);
 }
 
+/* FADE */
 .show {
-  opacity: 1;
+  opacity:1;
   transition: all 1.2s ease;
-}
-
-/* RESPONSIVE SAFE SPACING */
-@media (max-width: 480px) {
-  .progress-wrap {
-    width: 90px;
-    height: 90px;
-  }
 }
 
 </style>
@@ -125,97 +111,144 @@ canvas {
 
 <canvas id="canvas"></canvas>
 
-<div class="container" id="main">
+<div class="container" id="ui">
   <div class="title" id="title">ShahalGlide</div>
-  <div class="subtitle" id="subtitle">Building something that simply works better.</div>
+  <div class="subtitle" id="subtitle">Designed to move better. Built to feel right.</div>
 
-  <div class="progress-wrap" id="progress">
-    <div class="progress-circle"></div>
-    <div class="progress-fill"></div>
+  <div class="progress" id="progress">
+    <svg width="100" height="100">
+      <circle cx="50" cy="50" r="50"></circle>
+      <circle cx="50" cy="50" r="50" class="active"></circle>
+    </svg>
   </div>
 </div>
 
 <script>
 
-/* ---------------- CANVAS LINE ANIMATION ---------------- */
+/* ---------------- CANVAS PARTICLE SYSTEM ---------------- */
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
 
-let lines = [];
+/* CREATE TEXT MAP */
+function getTextPoints(text) {
+  const off = document.createElement("canvas");
+  const octx = off.getContext("2d");
 
-for (let i = 0; i < 25; i++) {
-  lines.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    dx: (Math.random() - 0.5) * 4,
-    dy: (Math.random() - 0.5) * 4
+  off.width = canvas.width;
+  off.height = canvas.height;
+
+  let size = Math.min(canvas.width / 8, 120);
+
+  octx.fillStyle = "#fff";
+  octx.font = `600 ${size}px Inter`;
+  octx.textAlign = "center";
+  octx.fillText(text, off.width/2, off.height/2);
+
+  const data = octx.getImageData(0,0,off.width,off.height).data;
+  let points = [];
+
+  for (let y=0; y<off.height; y+=6) {
+    for (let x=0; x<off.width; x+=6) {
+      const i = (y*off.width + x)*4;
+      if (data[i+3] > 128) {
+        points.push({x,y});
+      }
+    }
+  }
+  return points;
+}
+
+const textPoints = getTextPoints("ShahalGlide");
+
+/* PARTICLES */
+let particles = [];
+
+for (let i=0; i<textPoints.length; i++) {
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    tx: textPoints[i].x,
+    ty: textPoints[i].y,
+    vx: 0,
+    vy: 0
   });
 }
 
-function animateLines() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+/* ANIMATION STATES */
+let forming = true;
 
-  ctx.strokeStyle = "rgba(255,255,255,0.08)";
-  ctx.lineWidth = 1;
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  lines.forEach(l => {
-    ctx.beginPath();
-    ctx.moveTo(l.x, l.y);
-    ctx.lineTo(l.x + l.dx * 10, l.y + l.dy * 10);
-    ctx.stroke();
+  particles.forEach(p => {
 
-    l.x += l.dx;
-    l.y += l.dy;
+    if (forming) {
+      let dx = p.tx - p.x;
+      let dy = p.ty - p.y;
 
-    if (l.x < 0 || l.x > canvas.width) l.dx *= -1;
-    if (l.y < 0 || l.y > canvas.height) l.dy *= -1;
+      p.vx += dx * 0.01;
+      p.vy += dy * 0.01;
+
+      p.vx *= 0.85;
+      p.vy *= 0.85;
+
+      p.x += p.vx;
+      p.y += p.vy;
+    } else {
+      // idle subtle motion
+      p.x += Math.sin(p.y * 0.01) * 0.2;
+      p.y += Math.cos(p.x * 0.01) * 0.2;
+    }
+
+    ctx.fillStyle = "rgba(255,255,255,0.8)";
+    ctx.fillRect(p.x, p.y, 1.5, 1.5);
   });
 
-  requestAnimationFrame(animateLines);
+  requestAnimationFrame(animate);
 }
 
-animateLines();
+animate();
 
-/* ---------------- CINEMATIC SEQUENCE ---------------- */
-const container = document.getElementById("main");
+/* ---------------- CINEMATIC TIMELINE ---------------- */
+const ui = document.getElementById("ui");
 const title = document.getElementById("title");
 const subtitle = document.getElementById("subtitle");
 const progress = document.getElementById("progress");
 
-/* Step 1: chaotic blur intro */
-setTimeout(() => {
-  container.classList.add("show", "blur");
-}, 500);
+/* blur intro */
+ui.classList.add("blur");
 
-/* Step 2: text reveal */
 setTimeout(() => {
-  container.classList.remove("blur");
-  title.classList.add("show");
+  ui.classList.remove("blur");
 }, 2000);
 
-/* Step 3: subtitle */
+/* stop forming → settle */
 setTimeout(() => {
-  subtitle.classList.add("show");
+  forming = false;
+  title.classList.add("show");
 }, 3000);
 
-/* Step 4: progress intro */
+/* subtitle */
 setTimeout(() => {
-  progress.classList.add("show");
+  subtitle.classList.add("show");
 }, 3800);
 
-/* Step 5: idle transition */
+/* progress intro */
 setTimeout(() => {
-  container.classList.add("idle");
-}, 5500);
+  progress.classList.add("show");
+}, 4500);
 
-/* RESPONSIVE FIX */
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+/* idle mode */
+setTimeout(() => {
+  ui.classList.add("idle");
+}, 6000);
 
 </script>
 
