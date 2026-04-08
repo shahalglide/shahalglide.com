@@ -5,125 +5,226 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShahalGlide</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
 <style>
-/* RESET */
+
+/* ---------------- GLOBAL ---------------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
 }
 
 body {
   height: 100vh;
-  background: radial-gradient(circle at top, #0f0f1a, #050508);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: radial-gradient(circle at 20% 20%, #111827, #020617);
   overflow: hidden;
   color: white;
+  font-family: 'Inter', sans-serif;
 }
 
-/* CONTAINER */
+/* ---------------- BACKGROUND ENERGY ---------------- */
+.bg-glow {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0,255,255,0.08), transparent 60%),
+              radial-gradient(circle, rgba(255,0,200,0.08), transparent 60%);
+  animation: moveGlow 10s linear infinite;
+}
+
+@keyframes moveGlow {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(-20%, -10%); }
+  100% { transform: translate(0,0); }
+}
+
+/* ---------------- MAIN CARD ---------------- */
 .container {
+  position: relative;
+  z-index: 2;
+  width: 320px;
+  padding: 40px 25px;
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
   text-align: center;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%) scale(0.9);
   opacity: 0;
-  transform: translateY(30px);
-  animation: introFade 1.2s ease forwards;
+  animation: enter 1.5s ease forwards;
 }
 
-/* TITLE */
+@keyframes enter {
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+/* ---------------- TITLE ---------------- */
 .title {
-  font-size: 2.8rem;
-  letter-spacing: 2px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: 3px;
   background: linear-gradient(90deg, #00f5ff, #ff00c8);
   -webkit-background-clip: text;
   color: transparent;
-  animation: glowText 2s ease-in-out infinite alternate;
+  opacity: 0;
+  animation: revealText 2s ease forwards 0.5s;
 }
 
-/* SUBTITLE */
+@keyframes revealText {
+  from {
+    letter-spacing: 20px;
+    opacity: 0;
+  }
+  to {
+    letter-spacing: 3px;
+    opacity: 1;
+  }
+}
+
+/* ---------------- SUBTITLE ---------------- */
 .subtitle {
   margin-top: 12px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #aaa;
   opacity: 0;
-  animation: fadeIn 2s ease forwards 1s;
+  animation: fadeIn 2s ease forwards 1.8s;
 }
 
-/* LOADER RING */
+/* ---------------- LOADER ---------------- */
 .loader {
   margin: 40px auto;
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.1);
+  position: relative;
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+}
+
+.loader::before {
   border-top: 3px solid #00f5ff;
   border-right: 3px solid #ff00c8;
-  animation: spin 1s linear infinite;
+  animation: spinFast 1s linear infinite;
 }
 
-/* AFTER INTRO (IDLE STATE) */
-.idle .loader {
-  animation: slowSpin 6s linear infinite;
+.loader::after {
+  border-bottom: 3px solid #00f5ff;
+  border-left: 3px solid #ff00c8;
+  animation: spinReverse 1.2s linear infinite;
 }
 
-.idle .title {
+@keyframes spinFast {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  to { transform: rotate(-360deg); }
+}
+
+/* ---------------- ENERGY PULSE ---------------- */
+.pulse {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,0,200,0.4), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: pulseAnim 2s ease-out infinite;
+}
+
+@keyframes pulseAnim {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+/* ---------------- IDLE STATES (RANDOMIZED) ---------------- */
+
+/* Style 1 */
+.idle1 .loader::before {
+  animation: spinFast 5s linear infinite;
+}
+.idle1 .pulse {
   animation: none;
-  opacity: 0.9;
 }
 
-/* ANIMATIONS */
-
-@keyframes introFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Style 2 */
+.idle2 .loader::before {
+  animation: spinFast 8s linear infinite;
+}
+.idle2 .title {
+  text-shadow: 0 0 20px #00f5ff;
 }
 
-@keyframes glowText {
-  from {
-    text-shadow: 0 0 10px #00f5ff;
-  }
-  to {
-    text-shadow: 0 0 20px #ff00c8;
-  }
+/* Style 3 */
+.idle3 .loader {
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  50% { transform: translateY(-10px); }
+}
+
+/* ---------------- TRANSITIONS ---------------- */
+.fadeIn {
+  animation: fadeIn 1s forwards;
 }
 
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
+  to { opacity: 1; }
 }
 
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes slowSpin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
 </style>
 </head>
 
 <body>
 
+<div class="bg-glow"></div>
+
 <div class="container" id="main">
   <div class="title">SHAHALGLIDE</div>
-  <div class="subtitle">Crafting something extraordinary</div>
+  <div class="subtitle">Redefining Performance & Precision</div>
+
   <div class="loader"></div>
+  <div class="pulse"></div>
 </div>
 
 <script>
-// After intro → switch to idle mode
+
+/* ---------------- RANDOM LOOP SELECTION ---------------- */
+function setIdleMode() {
+  const el = document.getElementById("main");
+  const styles = ["idle1", "idle2", "idle3"];
+  const random = styles[Math.floor(Math.random() * styles.length)];
+  el.classList.add(random);
+}
+
+/* ---------------- INTRO TIMELINE ---------------- */
 setTimeout(() => {
-  document.getElementById("main").classList.add("idle");
-}, 4000);
+  setIdleMode();
+}, 4500);
+
+/* OPTIONAL: Slight cinematic delay before showing page */
+document.body.style.opacity = 0;
+window.onload = () => {
+  document.body.style.transition = "opacity 1s ease";
+  document.body.style.opacity = 1;
+};
+
 </script>
 
 </body>
