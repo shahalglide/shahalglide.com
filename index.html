@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShahalGlide</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* ---------------- GLOBAL ---------------- */
+/* ---------------- BASE ---------------- */
 * {
   margin: 0;
   padding: 0;
@@ -17,175 +17,105 @@
 }
 
 body {
-  height: 100vh;
-  background: radial-gradient(circle at 20% 20%, #111827, #020617);
-  overflow: hidden;
-  color: white;
+  background: #000;
+  color: #fff;
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
 }
 
-/* ---------------- BACKGROUND ENERGY ---------------- */
-.bg-glow {
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(0,255,255,0.08), transparent 60%),
-              radial-gradient(circle, rgba(255,0,200,0.08), transparent 60%);
-  animation: moveGlow 10s linear infinite;
+/* ---------------- CANVAS (LINES + CINEMATIC) ---------------- */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes moveGlow {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(-20%, -10%); }
-  100% { transform: translate(0,0); }
-}
-
-/* ---------------- MAIN CARD ---------------- */
+/* ---------------- MAIN CONTENT ---------------- */
 .container {
-  position: relative;
-  z-index: 2;
-  width: 320px;
-  padding: 40px 25px;
-  border-radius: 20px;
-  backdrop-filter: blur(20px);
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  position: absolute;
+  width: 100%;
   text-align: center;
-  margin: auto;
   top: 50%;
-  transform: translateY(-50%) scale(0.9);
+  transform: translateY(-50%);
+  padding: 0 20px;
   opacity: 0;
-  animation: enter 1.5s ease forwards;
 }
 
-@keyframes enter {
-  to {
-    opacity: 1;
-    transform: translateY(-50%) scale(1);
-  }
-}
-
-/* ---------------- TITLE ---------------- */
+/* TEXTS */
 .title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.2rem;
-  letter-spacing: 3px;
-  background: linear-gradient(90deg, #00f5ff, #ff00c8);
-  -webkit-background-clip: text;
-  color: transparent;
+  font-size: clamp(28px, 6vw, 52px);
+  font-weight: 600;
+  letter-spacing: 2px;
   opacity: 0;
-  animation: revealText 2s ease forwards 0.5s;
 }
 
-@keyframes revealText {
-  from {
-    letter-spacing: 20px;
-    opacity: 0;
-  }
-  to {
-    letter-spacing: 3px;
-    opacity: 1;
-  }
-}
-
-/* ---------------- SUBTITLE ---------------- */
 .subtitle {
   margin-top: 12px;
-  font-size: 0.9rem;
+  font-size: clamp(14px, 3.5vw, 18px);
   color: #aaa;
   opacity: 0;
-  animation: fadeIn 2s ease forwards 1.8s;
 }
 
-/* ---------------- LOADER ---------------- */
-.loader {
-  margin: 40px auto;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
+/* PROGRESS */
+.progress-wrap {
+  margin-top: 40px;
+  width: 120px;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
+  opacity: 0;
 }
 
-.loader::before,
-.loader::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+.progress-circle {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  border: 3px solid transparent;
+  border: 2px solid rgba(255,255,255,0.1);
+  position: absolute;
 }
 
-.loader::before {
-  border-top: 3px solid #00f5ff;
-  border-right: 3px solid #ff00c8;
-  animation: spinFast 1s linear infinite;
+.progress-fill {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid white;
+  border-top-color: transparent;
+  animation: spin 1.2s linear infinite;
 }
 
-.loader::after {
-  border-bottom: 3px solid #00f5ff;
-  border-left: 3px solid #ff00c8;
-  animation: spinReverse 1.2s linear infinite;
+/* IDLE LOOP */
+.idle .progress-fill {
+  animation: spinSlow 6s linear infinite;
 }
 
-@keyframes spinFast {
+@keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-@keyframes spinReverse {
-  to { transform: rotate(-360deg); }
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
 }
 
-/* ---------------- ENERGY PULSE ---------------- */
-.pulse {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,0,200,0.4), transparent 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  animation: pulseAnim 2s ease-out infinite;
+/* FADE + BLUR CONTROL */
+.blur {
+  filter: blur(10px);
 }
 
-@keyframes pulseAnim {
-  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+.show {
+  opacity: 1;
+  transition: all 1.2s ease;
 }
 
-/* ---------------- IDLE STATES (RANDOMIZED) ---------------- */
-
-/* Style 1 */
-.idle1 .loader::before {
-  animation: spinFast 5s linear infinite;
-}
-.idle1 .pulse {
-  animation: none;
-}
-
-/* Style 2 */
-.idle2 .loader::before {
-  animation: spinFast 8s linear infinite;
-}
-.idle2 .title {
-  text-shadow: 0 0 20px #00f5ff;
-}
-
-/* Style 3 */
-.idle3 .loader {
-  animation: float 4s ease-in-out infinite;
-}
-@keyframes float {
-  50% { transform: translateY(-10px); }
-}
-
-/* ---------------- TRANSITIONS ---------------- */
-.fadeIn {
-  animation: fadeIn 1s forwards;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
+/* RESPONSIVE SAFE SPACING */
+@media (max-width: 480px) {
+  .progress-wrap {
+    width: 90px;
+    height: 90px;
+  }
 }
 
 </style>
@@ -193,37 +123,99 @@ body {
 
 <body>
 
-<div class="bg-glow"></div>
+<canvas id="canvas"></canvas>
 
 <div class="container" id="main">
-  <div class="title">SHAHALGLIDE</div>
-  <div class="subtitle">Redefining Performance & Precision</div>
+  <div class="title" id="title">ShahalGlide</div>
+  <div class="subtitle" id="subtitle">Building something that simply works better.</div>
 
-  <div class="loader"></div>
-  <div class="pulse"></div>
+  <div class="progress-wrap" id="progress">
+    <div class="progress-circle"></div>
+    <div class="progress-fill"></div>
+  </div>
 </div>
 
 <script>
 
-/* ---------------- RANDOM LOOP SELECTION ---------------- */
-function setIdleMode() {
-  const el = document.getElementById("main");
-  const styles = ["idle1", "idle2", "idle3"];
-  const random = styles[Math.floor(Math.random() * styles.length)];
-  el.classList.add(random);
+/* ---------------- CANVAS LINE ANIMATION ---------------- */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let lines = [];
+
+for (let i = 0; i < 25; i++) {
+  lines.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    dx: (Math.random() - 0.5) * 4,
+    dy: (Math.random() - 0.5) * 4
+  });
 }
 
-/* ---------------- INTRO TIMELINE ---------------- */
-setTimeout(() => {
-  setIdleMode();
-}, 4500);
+function animateLines() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-/* OPTIONAL: Slight cinematic delay before showing page */
-document.body.style.opacity = 0;
-window.onload = () => {
-  document.body.style.transition = "opacity 1s ease";
-  document.body.style.opacity = 1;
-};
+  ctx.strokeStyle = "rgba(255,255,255,0.08)";
+  ctx.lineWidth = 1;
+
+  lines.forEach(l => {
+    ctx.beginPath();
+    ctx.moveTo(l.x, l.y);
+    ctx.lineTo(l.x + l.dx * 10, l.y + l.dy * 10);
+    ctx.stroke();
+
+    l.x += l.dx;
+    l.y += l.dy;
+
+    if (l.x < 0 || l.x > canvas.width) l.dx *= -1;
+    if (l.y < 0 || l.y > canvas.height) l.dy *= -1;
+  });
+
+  requestAnimationFrame(animateLines);
+}
+
+animateLines();
+
+/* ---------------- CINEMATIC SEQUENCE ---------------- */
+const container = document.getElementById("main");
+const title = document.getElementById("title");
+const subtitle = document.getElementById("subtitle");
+const progress = document.getElementById("progress");
+
+/* Step 1: chaotic blur intro */
+setTimeout(() => {
+  container.classList.add("show", "blur");
+}, 500);
+
+/* Step 2: text reveal */
+setTimeout(() => {
+  container.classList.remove("blur");
+  title.classList.add("show");
+}, 2000);
+
+/* Step 3: subtitle */
+setTimeout(() => {
+  subtitle.classList.add("show");
+}, 3000);
+
+/* Step 4: progress intro */
+setTimeout(() => {
+  progress.classList.add("show");
+}, 3800);
+
+/* Step 5: idle transition */
+setTimeout(() => {
+  container.classList.add("idle");
+}, 5500);
+
+/* RESPONSIVE FIX */
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
 </script>
 
