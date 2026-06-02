@@ -3,208 +3,209 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shahal Glide</title>
 
-<title>Launching...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <style>
-
-/* ---------------- BASE ---------------- */
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  background: #000;
-  color: white;
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+font-family:Inter,sans-serif;
+background:#090909;
+color:#fff;
+overflow-x:hidden;
+}
+section{
+min-height:100vh;
+padding:12vh 8vw;
+display:flex;
+align-items:center;
+}
+.container{max-width:1200px;margin:auto;width:100%}
+.hero{
+background:
+radial-gradient(circle at 20% 20%, rgba(138,43,226,.4), transparent 35%),
+radial-gradient(circle at 80% 20%, rgba(0,191,255,.3), transparent 35%),
+radial-gradient(circle at 50% 80%, rgba(255,0,128,.3), transparent 35%),
+#090909;
+text-align:center;
+}
+.hero h1{
+font-size:clamp(4rem,10vw,8rem);
+font-weight:800;
+letter-spacing:-4px;
+}
+.hero p{
+margin-top:20px;
+font-size:1.2rem;
+color:#cfcfcf;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+}
+.scroll{
+margin-top:40px;
+opacity:.7;
+animation:bounce 2s infinite;
+}
+@keyframes bounce{
+50%{transform:translateY(12px)}
 }
 
-/* ---------------- ANIMATED GRADIENT BACKGROUND ---------------- */
-.bg {
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    120deg,
-    #ff6a00,
-    #ff3cac,
-    #784ba0,
-    #2b86c5,
-    #00c9ff
-  );
-  background-size: 400% 400%;
-  animation: gradientMove 12s ease infinite;
-  filter: blur(80px);
-  opacity: 0.6;
+.panel{
+border-radius:30px;
+padding:60px;
+backdrop-filter:blur(10px);
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.08);
 }
 
-@keyframes gradientMove {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(-20%, -20%); }
-  100% { transform: translate(0,0); }
+.title{
+font-size:clamp(2.5rem,6vw,5rem);
+font-weight:800;
+margin-bottom:20px;
+}
+.desc{
+font-size:1.15rem;
+line-height:1.8;
+max-width:750px;
+color:#e6e6e6;
 }
 
-/* ---------------- LIGHT LINES ---------------- */
-canvas {
-  position: absolute;
-  top:0;
-  left:0;
+.design{
+background:linear-gradient(135deg,#471069,#c2185b,#ff6f00);
+}
+.editing{
+background:linear-gradient(135deg,#003566,#0077b6,#00b4d8);
+}
+.code{
+background:linear-gradient(135deg,#0b1020,#173a8a,#2563eb);
+}
+.cyber{
+background:linear-gradient(135deg,#03120a,#065f46,#0f766e);
 }
 
-/* ---------------- CONTENT ---------------- */
-.container {
-  position: absolute;
-  width:100%;
-  top:50%;
-  transform: translateY(-50%);
-  text-align:center;
-  padding: 0 20px;
-  z-index: 2;
+.asset{
+margin-top:35px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+.asset img{
+width:min(320px,100%);
+border-radius:20px;
+box-shadow:0 20px 50px rgba(0,0,0,.35);
 }
 
-/* TEXT */
-.title {
-  font-size: clamp(22px, 5vw, 40px);
-  font-weight:500;
-  letter-spacing: 0.5px;
-  opacity:0;
+.contact{
+background:
+linear-gradient(135deg,#6a11cb,#2575fc,#00c9a7,#ff0080);
+text-align:center;
 }
-
-.subtitle {
-  margin-top:10px;
-  font-size: clamp(14px, 3.5vw, 18px);
-  color:#ddd;
-  opacity:0;
+.links{
+display:flex;
+justify-content:center;
+gap:18px;
+flex-wrap:wrap;
+margin-top:30px;
 }
-
-/* LOADER */
-.loader {
-  margin: 40px auto;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.15);
-  position: relative;
-  opacity:0;
+.links a{
+color:#fff;
+text-decoration:none;
+padding:14px 20px;
+border-radius:14px;
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.15);
 }
-
-.loader::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  border:2px solid white;
-  border-top-color:transparent;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* FOOTER */
-.footer {
-  position: absolute;
-  bottom: 20px;
-  width:100%;
-  text-align:center;
-  font-size: 12px;
-  color: rgba(255,255,255,0.4);
-}
-
-/* STATES */
-.show { opacity:1; transition: all 1.2s ease; }
-
 </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
-<canvas id="canvas"></canvas>
-
-<div class="container">
-  <div class="title" id="title">Preparing something better</div>
-  <div class="subtitle" id="subtitle">A new experience is on its way</div>
-
-  <div class="loader" id="loader"></div>
+<section class="hero">
+<div class="container reveal">
+<h1>Shahal Glide</h1>
+<p>Exploring graphic design, editing, programming, open source, and cybersecurity through continuous learning and creativity.</p>
+<div class="scroll"><i class="fa-solid fa-arrow-down"></i></div>
 </div>
+</section>
 
-<div class="footer">© 2026 ShahalGlide</div>
+<section class="design">
+<div class="container panel reveal">
+<div class="title">Graphic Design</div>
+<div class="desc">Creating visual concepts, experimenting with layouts, typography, and digital artwork while continuously improving creative skills.</div>
+<div class="asset">
+<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80">
+<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80">
+</div>
+</div>
+</section>
+
+<section class="editing">
+<div class="container panel reveal">
+<div class="title">Photo & Video Editing</div>
+<div class="desc">Transforming raw content into polished visuals through editing, composition, color work, and creative experimentation.</div>
+<div class="asset">
+<img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=80">
+<img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=900&q=80">
+</div>
+</div>
+</section>
+
+<section class="code">
+<div class="container panel reveal">
+<div class="title">Programming & Open Source</div>
+<div class="desc">Learning software development, building projects, and contributing to open-source communities while growing technical skills.</div>
+<div class="asset">
+<img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80">
+</div>
+</div>
+</section>
+
+<section class="cyber">
+<div class="container panel reveal">
+<div class="title">Cybersecurity</div>
+<div class="desc">Exploring security concepts, ethical hacking, problem solving, and hands-on learning through cybersecurity platforms and challenges.</div>
+<div class="asset">
+<img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=80">
+</div>
+</div>
+</section>
+
+<section class="contact">
+<div class="container reveal">
+<div class="title">One Identity. Multiple Paths.</div>
+<div class="desc">Shahal Glide</div>
+<div class="links">
+<a href="#">GitHub</a>
+<a href="#">LinkedIn</a>
+<a href="#">Instagram</a>
+<a href="#">Contact</a>
+</div>
+</div>
+</section>
 
 <script>
+gsap.registerPlugin(ScrollTrigger);
 
-/* ---------------- CANVAS LIGHT LINES ---------------- */
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+gsap.utils.toArray('.reveal').forEach(el=>{
+gsap.from(el,{
+y:80,
+opacity:0,
+duration:1,
+ease:'power3.out',
+scrollTrigger:{
+trigger:el,
+start:'top 80%'
 }
-resize();
-window.addEventListener("resize", resize);
-
-let lines = [];
-
-for (let i = 0; i < 30; i++) {
-  lines.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    len: Math.random() * 100 + 50,
-    speed: Math.random() * 2 + 0.5,
-    angle: Math.random() * Math.PI * 2
-  });
-}
-
-function animateLines() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  lines.forEach(l => {
-    ctx.beginPath();
-    ctx.moveTo(l.x, l.y);
-    ctx.lineTo(
-      l.x + Math.cos(l.angle) * l.len,
-      l.y + Math.sin(l.angle) * l.len
-    );
-
-    ctx.strokeStyle = "rgba(255,255,255,0.08)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    l.x += Math.cos(l.angle) * l.speed;
-    l.y += Math.sin(l.angle) * l.speed;
-
-    // wrap around screen
-    if (l.x > canvas.width) l.x = 0;
-    if (l.x < 0) l.x = canvas.width;
-    if (l.y > canvas.height) l.y = 0;
-    if (l.y < 0) l.y = canvas.height;
-  });
-
-  requestAnimationFrame(animateLines);
-}
-
-animateLines();
-
-/* ---------------- TIMELINE ---------------- */
-const title = document.getElementById("title");
-const subtitle = document.getElementById("subtitle");
-const loader = document.getElementById("loader");
-
-setTimeout(() => {
-  title.classList.add("show");
-}, 1000);
-
-setTimeout(() => {
-  subtitle.classList.add("show");
-}, 2000);
-
-setTimeout(() => {
-  loader.classList.add("show");
-}, 2800);
-
+});
+});
 </script>
 
 </body>
