@@ -6,186 +6,181 @@
 <title>Shahal Glide</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-font-family:Inter,sans-serif;
-background:#090909;
-color:#fff;
-overflow-x:hidden;
+:root{
+--bg:#060606;
+--text:#fff;
 }
-section{
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden;background:var(--bg);color:var(--text);font-family:Inter,sans-serif}
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 20% 20%,rgba(130,80,255,.25),transparent 30%),
+radial-gradient(circle at 80% 30%,rgba(0,220,255,.18),transparent 30%),
+radial-gradient(circle at 50% 80%,rgba(255,0,150,.15),transparent 35%);
+filter:blur(50px);
+pointer-events:none;
+}
+
+.hero{
 min-height:100vh;
-padding:12vh 8vw;
 display:flex;
 align-items:center;
-}
-.container{max-width:1200px;margin:auto;width:100%}
-.hero{
-background:
-radial-gradient(circle at 20% 20%, rgba(138,43,226,.4), transparent 35%),
-radial-gradient(circle at 80% 20%, rgba(0,191,255,.3), transparent 35%),
-radial-gradient(circle at 50% 80%, rgba(255,0,128,.3), transparent 35%),
-#090909;
+justify-content:center;
 text-align:center;
+padding:2rem;
 }
 .hero h1{
-font-size:clamp(4rem,10vw,8rem);
+font-size:clamp(4rem,14vw,9rem);
 font-weight:800;
-letter-spacing:-4px;
+letter-spacing:-.08em;
+background:linear-gradient(90deg,#fff,#8ab4ff,#ff7fd1,#fff);
+background-size:300% 100%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shine 10s linear infinite;
 }
+@keyframes shine{to{background-position:300% 0}}
 .hero p{
-margin-top:20px;
-font-size:1.2rem;
+max-width:720px;
+margin:20px auto;
+font-size:clamp(1rem,2.5vw,1.3rem);
 color:#cfcfcf;
-max-width:700px;
-margin-left:auto;
-margin-right:auto;
-}
-.scroll{
-margin-top:40px;
-opacity:.7;
-animation:bounce 2s infinite;
-}
-@keyframes bounce{
-50%{transform:translateY(12px)}
 }
 
-.panel{
-border-radius:30px;
-padding:60px;
-backdrop-filter:blur(10px);
-background:rgba(255,255,255,.06);
+.section{
+min-height:100vh;
+display:flex;
+align-items:center;
+padding:8vw;
+position:relative;
+}
+.card{
+width:min(1200px,100%);
+margin:auto;
+padding:clamp(24px,4vw,60px);
+border-radius:32px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(16px);
 border:1px solid rgba(255,255,255,.08);
 }
-
-.title{
-font-size:clamp(2.5rem,6vw,5rem);
-font-weight:800;
+h2{
+font-size:clamp(2.5rem,8vw,6rem);
+line-height:.95;
 margin-bottom:20px;
 }
-.desc{
-font-size:1.15rem;
+p{
+font-size:clamp(1rem,2vw,1.15rem);
 line-height:1.8;
-max-width:750px;
-color:#e6e6e6;
+color:#e5e5e5;
+max-width:700px;
 }
 
-.design{
-background:linear-gradient(135deg,#471069,#c2185b,#ff6f00);
-}
-.editing{
-background:linear-gradient(135deg,#003566,#0077b6,#00b4d8);
-}
-.code{
-background:linear-gradient(135deg,#0b1020,#173a8a,#2563eb);
-}
-.cyber{
-background:linear-gradient(135deg,#03120a,#065f46,#0f766e);
-}
+.design h2{background:linear-gradient(90deg,#d946ef,#fb7185,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.edit h2{background:linear-gradient(90deg,#38bdf8,#60a5fa,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.code h2{background:linear-gradient(90deg,#22c55e,#14b8a6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cyber h2{background:linear-gradient(90deg,#34d399,#10b981,#84cc16);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
-.asset{
+.mock{
 margin-top:35px;
-display:flex;
-gap:20px;
-flex-wrap:wrap;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
 }
-.asset img{
-width:min(320px,100%);
-border-radius:20px;
-box-shadow:0 20px 50px rgba(0,0,0,.35);
+.tile{
+height:180px;
+border-radius:24px;
+background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.03));
+border:1px solid rgba(255,255,255,.08);
+transform-style:preserve-3d;
 }
 
 .contact{
-background:
-linear-gradient(135deg,#6a11cb,#2575fc,#00c9a7,#ff0080);
-text-align:center;
-}
-.links{
+min-height:100vh;
 display:flex;
+align-items:center;
 justify-content:center;
-gap:18px;
-flex-wrap:wrap;
+text-align:center;
+padding:2rem;
+}
+.contact h2{font-size:clamp(3rem,10vw,7rem)}
+.links{
 margin-top:30px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:12px;
 }
 .links a{
-color:#fff;
 text-decoration:none;
-padding:14px 20px;
+color:white;
+padding:14px 18px;
 border-radius:14px;
-background:rgba(255,255,255,.12);
-border:1px solid rgba(255,255,255,.15);
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.1);
+}
+
+@media(max-width:768px){
+.section{padding:24px}
+.card{border-radius:24px}
 }
 </style>
 </head>
 <body>
 
 <section class="hero">
-<div class="container reveal">
-<h1>Shahal Glide</h1>
-<p>Exploring graphic design, editing, programming, open source, and cybersecurity through continuous learning and creativity.</p>
-<div class="scroll"><i class="fa-solid fa-arrow-down"></i></div>
+<div>
+<h1 id="heroTitle">Shahal Glide</h1>
+<p>Exploring graphic design, editing, programming, open source, and cybersecurity through creativity, curiosity, and continuous learning.</p>
 </div>
 </section>
 
-<section class="design">
-<div class="container panel reveal">
-<div class="title">Graphic Design</div>
-<div class="desc">Creating visual concepts, experimenting with layouts, typography, and digital artwork while continuously improving creative skills.</div>
-<div class="asset">
-<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80">
-<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80">
-</div>
+<section class="section design">
+<div class="card reveal">
+<h2>Graphic Design</h2>
+<p>Visual concepts, layouts, branding experiments, and digital creativity brought together through thoughtful design.</p>
+<div class="mock"><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
 </div>
 </section>
 
-<section class="editing">
-<div class="container panel reveal">
-<div class="title">Photo & Video Editing</div>
-<div class="desc">Transforming raw content into polished visuals through editing, composition, color work, and creative experimentation.</div>
-<div class="asset">
-<img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=80">
-<img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=900&q=80">
-</div>
+<section class="section edit">
+<div class="card reveal">
+<h2>Editing</h2>
+<p>Photo and video editing focused on composition, presentation, storytelling, and refining content into something memorable.</p>
+<div class="mock"><div class="tile"></div><div class="tile"></div></div>
 </div>
 </section>
 
-<section class="code">
-<div class="container panel reveal">
-<div class="title">Programming & Open Source</div>
-<div class="desc">Learning software development, building projects, and contributing to open-source communities while growing technical skills.</div>
-<div class="asset">
-<img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80">
-</div>
+<section class="section code">
+<div class="card reveal">
+<h2>Programming</h2>
+<p>Learning software development, building projects, and contributing to open source while steadily expanding technical skills.</p>
+<div class="mock"><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
 </div>
 </section>
 
-<section class="cyber">
-<div class="container panel reveal">
-<div class="title">Cybersecurity</div>
-<div class="desc">Exploring security concepts, ethical hacking, problem solving, and hands-on learning through cybersecurity platforms and challenges.</div>
-<div class="asset">
-<img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=80">
-</div>
+<section class="section cyber">
+<div class="card reveal">
+<h2>Cybersecurity</h2>
+<p>Exploring security, ethical hacking, research, and practical problem solving through continuous hands-on learning.</p>
+<div class="mock"><div class="tile"></div><div class="tile"></div></div>
 </div>
 </section>
 
 <section class="contact">
-<div class="container reveal">
-<div class="title">One Identity. Multiple Paths.</div>
-<div class="desc">Shahal Glide</div>
+<div>
+<h2>One Identity.<br>Multiple Paths.</h2>
 <div class="links">
 <a href="#">GitHub</a>
 <a href="#">LinkedIn</a>
-<a href="#">Instagram</a>
 <a href="#">Contact</a>
 </div>
 </div>
@@ -194,19 +189,37 @@ border:1px solid rgba(255,255,255,.15);
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.utils.toArray('.reveal').forEach(el=>{
-gsap.from(el,{
-y:80,
+gsap.from("#heroTitle",{
+scale:.7,
 opacity:0,
-duration:1,
-ease:'power3.out',
+duration:1.4,
+ease:"power4.out"
+});
+
+document.querySelectorAll(".reveal").forEach(el=>{
+gsap.from(el,{
+y:120,
+opacity:0,
+duration:1.2,
+ease:"power3.out",
 scrollTrigger:{
 trigger:el,
-start:'top 80%'
+start:"top 80%"
 }
 });
 });
-</script>
 
+document.querySelectorAll(".tile").forEach(tile=>{
+tile.addEventListener("mousemove",(e)=>{
+const r=tile.getBoundingClientRect();
+const x=e.clientX-r.left;
+const y=e.clientY-r.top;
+tile.style.transform=`rotateY(${(x-r.width/2)/20}deg) rotateX(${-(y-r.height/2)/20}deg)`;
+});
+tile.addEventListener("mouseleave",()=>{
+tile.style.transform="rotateY(0deg) rotateX(0deg)";
+});
+});
+</script>
 </body>
 </html>
