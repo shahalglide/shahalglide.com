@@ -3,156 +3,363 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shahal Glide</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<title>shahalglide.com</title>
 
 <style>
-:root{--bg:#060606;--text:#fff}
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{overflow-x:hidden;background:var(--bg);color:var(--text);font-family:Inter,sans-serif}
-body::before{
-content:"";position:fixed;inset:0;
-background:
-radial-gradient(circle at 20% 20%,rgba(130,80,255,.25),transparent 30%),
-radial-gradient(circle at 80% 30%,rgba(0,220,255,.18),transparent 30%),
-radial-gradient(circle at 50% 80%,rgba(255,0,150,.15),transparent 35%);
-filter:blur(50px);pointer-events:none;
+:root{
+    --bg-1:#08111d;
+    --bg-2:#11253a;
+    --glass:rgba(255,255,255,.08);
+    --glass-border:rgba(255,255,255,.14);
+    --text:#ffffff;
+    --muted:rgba(255,255,255,.72);
 }
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}
-.hero h1{
-font-size:clamp(4rem,14vw,9rem);font-weight:800;letter-spacing:-.08em;
-background:linear-gradient(90deg,#fff,#8ab4ff,#ff7fd1,#fff);
-background-size:300% 100%;
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-animation:shine 10s linear infinite;
-}
-@keyframes shine{to{background-position:300% 0}}
-.hero p{max-width:720px;margin:20px auto;font-size:clamp(1rem,2.5vw,1.3rem);color:#cfcfcf}
 
-.section{min-height:100vh;display:flex;align-items:center;padding:8vw}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+body{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text);
+
+    background:
+    radial-gradient(circle at 15% 20%, rgba(80,170,255,.25), transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(50,220,180,.18), transparent 35%),
+    linear-gradient(135deg,var(--bg-1),var(--bg-2));
+}
+
+/* Floating background */
+
+.bg{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.25;
+    pointer-events:none;
+}
+
+.orb.one{
+    width:300px;
+    height:300px;
+    background:#59c3ff;
+    top:-100px;
+    left:-100px;
+    animation:floatA 12s ease-in-out infinite;
+}
+
+.orb.two{
+    width:260px;
+    height:260px;
+    background:#4be6c4;
+    bottom:-90px;
+    right:-90px;
+    animation:floatB 14s ease-in-out infinite;
+}
+
+@keyframes floatA{
+    50%{
+        transform:translate(40px,40px);
+    }
+}
+
+@keyframes floatB{
+    50%{
+        transform:translate(-35px,-35px);
+    }
+}
+
+/* Main card */
+
 .card{
-width:min(1200px,100%);margin:auto;padding:clamp(24px,4vw,60px);
-border-radius:32px;background:rgba(255,255,255,.05);
-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);
-}
-h2{font-size:clamp(2.5rem,8vw,6rem);line-height:.95;margin-bottom:20px}
-p{font-size:clamp(1rem,2vw,1.15rem);line-height:1.8;color:#e5e5e5;max-width:700px}
+    width:min(900px,92vw);
+    padding:clamp(28px,4vw,56px);
 
-.design h2{background:linear-gradient(90deg,#d946ef,#fb7185,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.edit h2{background:linear-gradient(90deg,#38bdf8,#60a5fa,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.code h2{background:linear-gradient(90deg,#22c55e,#14b8a6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.cyber h2{background:linear-gradient(90deg,#34d399,#10b981,#84cc16);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    background:var(--glass);
+    border:1px solid var(--glass-border);
 
-.gallery{
-margin-top:35px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-}
-.gallery img{
-width:100%;height:200px;object-fit:cover;
-border-radius:24px;border:1px solid rgba(255,255,255,.08);
-transition:.4s;box-shadow:0 15px 40px rgba(0,0,0,.35);
-}
-.gallery img:hover{transform:translateY(-8px) scale(1.02)}
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
 
-.contact{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}
-.contact h2{font-size:clamp(3rem,10vw,7rem)}
-.links{margin-top:30px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
-.links a{
-text-decoration:none;color:white;padding:14px 18px;border-radius:14px;
-background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
+    border-radius:32px;
+
+    text-align:center;
+
+    position:relative;
+    overflow:hidden;
+
+    transition:
+    transform .15s ease,
+    border-color .3s ease;
 }
-footer{
-padding:30px;text-align:center;color:#999;
-border-top:1px solid rgba(255,255,255,.08)
+
+.glow{
+    position:absolute;
+    width:280px;
+    height:280px;
+    pointer-events:none;
+
+    background:
+    radial-gradient(circle,
+    rgba(255,255,255,.16),
+    transparent 70%);
+
+    transform:translate(-50%,-50%);
 }
-@media(max-width:768px){
-.section{padding:24px}
-.card{border-radius:24px}
+
+.domain{
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:3px;
+    color:rgba(255,255,255,.55);
+    margin-bottom:18px;
+}
+
+h1{
+    font-size:clamp(2.2rem,7vw,5rem);
+    line-height:1;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.subtitle{
+    max-width:650px;
+    margin:0 auto;
+
+    color:var(--muted);
+
+    font-size:clamp(.95rem,2vw,1.1rem);
+    line-height:1.75;
+}
+
+.line{
+    width:80px;
+    height:1px;
+    margin:30px auto;
+    background:rgba(255,255,255,.18);
+}
+
+.greeting{
+    color:#dcefff;
+    margin-bottom:28px;
+}
+
+.actions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+.action-btn{
+    text-decoration:none;
+    color:white;
+
+    min-width:145px;
+
+    padding:13px 22px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+
+    transition:
+    transform .25s ease,
+    background .25s ease,
+    border-color .25s ease;
+}
+
+.action-btn:hover{
+    transform:translateY(-4px);
+    background:rgba(255,255,255,.12);
+    border-color:rgba(255,255,255,.22);
+}
+
+.action-btn:active{
+    transform:translateY(0);
+}
+
+.footer{
+    margin-top:32px;
+    font-size:.85rem;
+    color:rgba(255,255,255,.45);
+}
+
+/* Small devices */
+
+@media (max-height:700px){
+
+    .card{
+        padding:24px;
+    }
+
+    h1{
+        font-size:2rem;
+    }
+
+    .subtitle{
+        line-height:1.55;
+    }
+
+    .line{
+        margin:20px auto;
+    }
+
+    .footer{
+        margin-top:20px;
+    }
+}
+
+@media (max-width:480px){
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .action-btn{
+        width:100%;
+    }
 }
 </style>
 </head>
+
 <body>
 
-<section class="hero">
-<div>
-<h1 id="heroTitle">Shahal Glide</h1>
-<p>Exploring graphic design, editing, programming, open source, and cybersecurity through creativity, curiosity, and continuous learning.</p>
+<div class="bg">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
 </div>
-</section>
 
-<section class="section design">
-<div class="card reveal">
-<h2>Graphic Design</h2>
-<p>Visual concepts, layouts, branding experiments, and digital creativity brought together through thoughtful design.</p>
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80">
-</div>
-</div>
-</section>
+<div class="card" id="card">
 
-<section class="section edit">
-<div class="card reveal">
-<h2>Editing</h2>
-<p>Photo and video editing focused on composition, presentation, storytelling, and refining content into something memorable.</p>
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80">
-</div>
-</div>
-</section>
+    <div class="glow" id="glow"></div>
 
-<section class="section code">
-<div class="card reveal">
-<h2>Programming</h2>
-<p>Learning software development, building projects, and contributing to open source while steadily expanding technical skills.</p>
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80">
-</div>
-</div>
-</section>
+    <div class="domain">
+        shahalglide.com
+    </div>
 
-<section class="section cyber">
-<div class="card reveal">
-<h2>Cybersecurity</h2>
-<p>Exploring security, ethical hacking, research, and practical problem solving through continuous hands-on learning.</p>
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80">
-<img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=1200&q=80">
-</div>
-</div>
-</section>
+    <h1>Well, you found it.</h1>
 
-<section class="contact">
-<div>
-<h2>One Identity.<br>Multiple Paths.</h2>
-<div class="links">
-<a href="#">GitHub</a><a href="#">LinkedIn</a><a href="#">Contact</a>
-</div>
-</div>
-</section>
+    <p class="subtitle">
+        Thanks for visiting shahalglide.com.
+        This website is still being put together,
+        but it's nice to have you here.
+    </p>
 
-<footer>© Shahal Glide 2026</footer>
+    <div class="line"></div>
+
+    <div class="greeting" id="greeting">
+        Welcome.
+    </div>
+
+    <div class="actions">
+
+        <a
+            href="mailto:contact@shahalglide.com"
+            class="action-btn">
+            ✉ Email Me
+        </a>
+
+        <a
+            href="https://contact.shahalglide.com"
+            class="action-btn">
+            ☏ Contact
+        </a>
+
+        <a
+            href="https://shahalglide.com"
+            class="action-btn">
+            ⌂ Home
+        </a>
+
+    </div>
+
+    <div class="footer">
+        © 2026 Shahal Glide
+    </div>
+
+</div>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
-gsap.from("#heroTitle",{scale:.7,opacity:0,duration:1.4,ease:"power4.out"});
-document.querySelectorAll(".reveal").forEach(el=>{
-gsap.from(el,{y:120,opacity:0,duration:1.2,ease:"power3.out",
-scrollTrigger:{trigger:el,start:"top 80%"}});
+const card = document.getElementById("card");
+const glow = document.getElementById("glow");
+
+function updateEffect(x,y){
+
+    const rect = card.getBoundingClientRect();
+
+    const px = x - rect.left;
+    const py = y - rect.top;
+
+    glow.style.left = px + "px";
+    glow.style.top = py + "px";
+
+    const rotateY = ((px / rect.width) - 0.5) * 8;
+    const rotateX = -((py / rect.height) - 0.5) * 8;
+
+    card.style.transform =
+        `perspective(1200px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)`;
+}
+
+window.addEventListener("mousemove",(e)=>{
+    updateEffect(e.clientX,e.clientY);
 });
+
+window.addEventListener("touchmove",(e)=>{
+    if(e.touches.length){
+        updateEffect(
+            e.touches[0].clientX,
+            e.touches[0].clientY
+        );
+    }
+},{passive:true});
+
+window.addEventListener("mouseleave",()=>{
+    card.style.transform = "none";
+});
+
+const hour = new Date().getHours();
+const greeting = document.getElementById("greeting");
+
+if(hour < 12){
+    greeting.textContent = "Good morning.";
+}
+else if(hour < 18){
+    greeting.textContent = "Good afternoon.";
+}
+else{
+    greeting.textContent = "Good evening.";
+}
 </script>
+
 </body>
 </html>
