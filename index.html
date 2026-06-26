@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>shahalglide.com</title>
+<title>This Site Doesn't Exist</title>
 
 <style>
 :root{
-    --bg-1:#08111d;
-    --bg-2:#11253a;
-    --glass:rgba(255,255,255,.08);
-    --glass-border:rgba(255,255,255,.14);
-    --text:#ffffff;
-    --muted:rgba(255,255,255,.72);
+    --bg:#f6f6f4;
+    --card:#ffffff;
+    --text:#171717;
+    --muted:#6f6f6f;
+    --line:#e5e5e5;
+    --accent:#2d6cdf;
 }
 
 *{
@@ -21,344 +21,318 @@
     box-sizing:border-box;
 }
 
-html,
 body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-}
-
-body{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                 BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
     color:var(--text);
-
-    background:
-    radial-gradient(circle at 15% 20%, rgba(80,170,255,.25), transparent 35%),
-    radial-gradient(circle at 85% 80%, rgba(50,220,180,.18), transparent 35%),
-    linear-gradient(135deg,var(--bg-1),var(--bg-2));
+    overflow:hidden;
+    height:100vh;
 }
 
-/* Floating background */
+/* Animated background */
 
-.bg{
-    position:absolute;
+.background{
+    position:fixed;
     inset:0;
+    z-index:-2;
     overflow:hidden;
 }
 
-.orb{
+.blob{
     position:absolute;
     border-radius:50%;
-    filter:blur(90px);
-    opacity:.25;
-    pointer-events:none;
+    filter:blur(110px);
+    opacity:.14;
+    animation:float 18s linear infinite;
 }
 
-.orb.one{
+.blob:nth-child(1){
+    width:450px;
+    height:450px;
+    background:#4677ff;
+    left:-100px;
+    top:-100px;
+}
+
+.blob:nth-child(2){
+    width:380px;
+    height:380px;
+    background:#ff8360;
+    right:-120px;
+    bottom:-80px;
+    animation-duration:22s;
+}
+
+.blob:nth-child(3){
     width:300px;
     height:300px;
-    background:#59c3ff;
-    top:-100px;
-    left:-100px;
-    animation:floatA 12s ease-in-out infinite;
+    background:#45b97c;
+    left:55%;
+    top:50%;
+    animation-duration:26s;
 }
 
-.orb.two{
-    width:260px;
-    height:260px;
-    background:#4be6c4;
-    bottom:-90px;
-    right:-90px;
-    animation:floatB 14s ease-in-out infinite;
+@keyframes float{
+
+0%{
+transform:translate(0,0) scale(1);
 }
 
-@keyframes floatA{
-    50%{
-        transform:translate(40px,40px);
-    }
+50%{
+transform:translate(80px,-40px) scale(1.15);
 }
 
-@keyframes floatB{
-    50%{
-        transform:translate(-35px,-35px);
-    }
+100%{
+transform:translate(0,0) scale(1);
 }
 
-/* Main card */
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:48px 48px;
+    opacity:.4;
+}
+
+/* Main */
+
+main{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:32px;
+}
 
 .card{
-    width:min(900px,92vw);
-    padding:clamp(28px,4vw,56px);
-
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    border-radius:32px;
-
-    text-align:center;
-
-    position:relative;
-    overflow:hidden;
-
-    transition:
-    transform .15s ease,
-    border-color .3s ease;
+    max-width:760px;
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:60px;
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.05);
+    animation:rise .8s ease;
 }
 
-.glow{
-    position:absolute;
-    width:280px;
-    height:280px;
-    pointer-events:none;
-
-    background:
-    radial-gradient(circle,
-    rgba(255,255,255,.16),
-    transparent 70%);
-
-    transform:translate(-50%,-50%);
+@keyframes rise{
+from{
+opacity:0;
+transform:translateY(24px);
+}
+to{
+opacity:1;
+transform:none;
+}
 }
 
-.domain{
-    font-size:.8rem;
-    text-transform:uppercase;
-    letter-spacing:3px;
-    color:rgba(255,255,255,.55);
-    margin-bottom:18px;
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:.85rem;
+    color:var(--muted);
+    margin-bottom:30px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--accent);
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+0%,100%{
+transform:scale(1);
+opacity:.7;
+}
+
+50%{
+transform:scale(1.5);
+opacity:1;
+}
+
 }
 
 h1{
-    font-size:clamp(2.2rem,7vw,5rem);
+    font-size:clamp(2.4rem,5vw,4.6rem);
     line-height:1;
-    font-weight:700;
-    margin-bottom:18px;
+    letter-spacing:-2px;
+    margin-bottom:24px;
 }
 
-.subtitle{
-    max-width:650px;
-    margin:0 auto;
-
+p{
     color:var(--muted);
-
-    font-size:clamp(.95rem,2vw,1.1rem);
-    line-height:1.75;
-}
-
-.line{
-    width:80px;
-    height:1px;
-    margin:30px auto;
-    background:rgba(255,255,255,.18);
-}
-
-.greeting{
-    color:#dcefff;
-    margin-bottom:28px;
+    line-height:1.8;
+    font-size:1.05rem;
+    max-width:560px;
 }
 
 .actions{
     display:flex;
-    justify-content:center;
-    align-items:center;
     gap:14px;
+    margin-top:40px;
     flex-wrap:wrap;
 }
 
-.action-btn{
-    text-decoration:none;
+button{
+    border:none;
+    cursor:pointer;
+    font:inherit;
+    transition:.25s;
+}
+
+.primary{
+    background:#171717;
     color:white;
-
-    min-width:145px;
-
-    padding:13px 22px;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-
-    transition:
-    transform .25s ease,
-    background .25s ease,
-    border-color .25s ease;
+    padding:14px 24px;
+    border-radius:12px;
 }
 
-.action-btn:hover{
-    transform:translateY(-4px);
-    background:rgba(255,255,255,.12);
-    border-color:rgba(255,255,255,.22);
+.primary:hover{
+    transform:translateY(-2px);
 }
 
-.action-btn:active{
-    transform:translateY(0);
+.secondary{
+    background:white;
+    border:1px solid var(--line);
+    color:#444;
+    padding:14px 24px;
+    border-radius:12px;
+}
+
+.secondary:hover{
+    background:#f2f2f2;
 }
 
 .footer{
-    margin-top:32px;
-    font-size:.85rem;
-    color:rgba(255,255,255,.45);
+    margin-top:55px;
+    font-size:.86rem;
+    color:#999;
 }
 
-/* Small devices */
-
-@media (max-height:700px){
-
-    .card{
-        padding:24px;
-    }
-
-    h1{
-        font-size:2rem;
-    }
-
-    .subtitle{
-        line-height:1.55;
-    }
-
-    .line{
-        margin:20px auto;
-    }
-
-    .footer{
-        margin-top:20px;
-    }
+.cursor{
+    display:inline-block;
+    width:2px;
+    height:1em;
+    background:#222;
+    vertical-align:middle;
+    animation:blink 1s infinite;
 }
 
-@media (max-width:480px){
+@keyframes blink{
+50%{
+opacity:0;
+}
+}
 
-    .actions{
-        flex-direction:column;
-    }
+@media(max-width:700px){
 
-    .action-btn{
-        width:100%;
-    }
+.card{
+padding:36px;
+}
+
+h1{
+letter-spacing:-1px;
+}
+
 }
 </style>
 </head>
-
 <body>
 
-<div class="bg">
-    <div class="orb one"></div>
-    <div class="orb two"></div>
+<div class="background">
+    <div class="grid"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
 </div>
 
-<div class="card" id="card">
+<main>
 
-    <div class="glow" id="glow"></div>
+<div class="card">
 
-    <div class="domain">
-        shahalglide.com
-    </div>
+<div class="status">
+<div class="dot"></div>
+<span id="status">Searching</span>
+</div>
 
-    <h1>Well, you found it.</h1>
+<h1>This site doesn't exist.</h1>
 
-    <p class="subtitle">
-        Thanks for visiting shahalglide.com.
-        This website is still being put together,
-        but it's nice to have you here.
-    </p>
+<p>
+The address you're looking for couldn't be reached. It may have never existed,
+been moved, or is temporarily unavailable.
+</p>
 
-    <div class="line"></div>
+<div class="actions">
+<button class="primary" onclick="location.reload()">
+Try Again
+</button>
 
-    <div class="greeting" id="greeting">
-        Welcome.
-    </div>
+<button class="secondary" onclick="history.back()">
+Go Back
+</button>
+</div>
 
-    <div class="actions">
-
-        <a
-            href="mailto:contact@shahalglide.com"
-            class="action-btn">
-            ✉ Email Me
-        </a>
-
-        <a
-            href="https://contact.shahalglide.com"
-            class="action-btn">
-            ☏ Contact
-        </a>
-
-        <a
-            href="https://shahalglide.com"
-            class="action-btn">
-            ⌂ Home
-        </a>
-
-    </div>
-
-    <div class="footer">
-        © 2026 Shahal Glide
-    </div>
+<div class="footer">
+Request ID:
+<span id="id"></span>
+</div>
 
 </div>
+
+</main>
 
 <script>
-const card = document.getElementById("card");
-const glow = document.getElementById("glow");
 
-function updateEffect(x,y){
+const messages=[
+"Searching",
+"Resolving domain",
+"Checking route",
+"No response",
+"Unavailable"
+];
 
-    const rect = card.getBoundingClientRect();
+let i=0;
 
-    const px = x - rect.left;
-    const py = y - rect.top;
+const status=document.getElementById("status");
 
-    glow.style.left = px + "px";
-    glow.style.top = py + "px";
+setInterval(()=>{
+i=(i+1)%messages.length;
+status.innerHTML=messages[i]+'<span class="cursor"></span>';
+},1700);
 
-    const rotateY = ((px / rect.width) - 0.5) * 8;
-    const rotateX = -((py / rect.height) - 0.5) * 8;
+document.getElementById("id").textContent=
+Math.random().toString(36).substring(2,10).toUpperCase();
 
-    card.style.transform =
-        `perspective(1200px)
-        rotateX(${rotateX}deg)
-        rotateY(${rotateY}deg)`;
-}
+const blobs=document.querySelectorAll(".blob");
 
-window.addEventListener("mousemove",(e)=>{
-    updateEffect(e.clientX,e.clientY);
+document.addEventListener("mousemove",(e)=>{
+
+const x=e.clientX/window.innerWidth-.5;
+const y=e.clientY/window.innerHeight-.5;
+
+blobs.forEach((blob,index)=>{
+
+const amount=(index+1)*15;
+
+blob.style.transform=
+`translate(${x*amount}px,${y*amount}px)`;
+
 });
 
-window.addEventListener("touchmove",(e)=>{
-    if(e.touches.length){
-        updateEffect(
-            e.touches[0].clientX,
-            e.touches[0].clientY
-        );
-    }
-},{passive:true});
-
-window.addEventListener("mouseleave",()=>{
-    card.style.transform = "none";
 });
 
-const hour = new Date().getHours();
-const greeting = document.getElementById("greeting");
-
-if(hour < 12){
-    greeting.textContent = "Good morning.";
-}
-else if(hour < 18){
-    greeting.textContent = "Good afternoon.";
-}
-else{
-    greeting.textContent = "Good evening.";
-}
 </script>
 
 </body>
