@@ -2,77 +2,415 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shahal Glide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f6f4;--card:#fff;--text:#181818;--muted:#707070;--line:#e8e8e8;--accent:#2d6cdf}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:-2}
-.grid{position:absolute;inset:0;background:
-linear-gradient(var(--line) 1px,transparent 1px),
-linear-gradient(90deg,var(--line) 1px,transparent 1px);
-background-size:48px 48px;opacity:.45}
-.blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.13;animation:f 20s ease-in-out infinite}
-.b1{width:430px;height:430px;background:#4d7dff;left:-120px;top:-120px}
-.b2{width:360px;height:360px;background:#ff8d66;right:-100px;bottom:-90px;animation-duration:24s}
-.b3{width:300px;height:300px;background:#4dbb81;left:52%;top:44%;animation-duration:28s}
-@keyframes f{50%{transform:translate(70px,-40px) scale(1.15)}}
-main{display:flex;align-items:center;justify-content:center;height:100%;padding:32px}
-.card{max-width:760px;width:100%;background:#fff;border:1px solid var(--line);border-radius:22px;padding:58px;box-shadow:0 20px 60px rgba(0,0,0,.05);animation:up .8s}
-@keyframes up{from{opacity:0;transform:translateY(20px)}}
-.status{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem;margin-bottom:28px}
-.dot{width:9px;height:9px;background:var(--accent);border-radius:50%;animation:p 2s infinite}
-@keyframes p{50%{transform:scale(1.5);opacity:1}0%,100%{opacity:.7}}
-h1{font-size:clamp(2.5rem,5vw,4.7rem);line-height:1;letter-spacing:-2px;margin-bottom:22px}
-p{max-width:560px;color:var(--muted);line-height:1.8;font-size:1.06rem}
-.actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
-button{font:inherit;padding:14px 24px;border-radius:12px;cursor:pointer;transition:.25s}
-.primary{background:#171717;color:#fff;border:none}.primary:hover{transform:translateY(-2px)}
-.secondary{background:#fff;border:1px solid var(--line)}.secondary:hover{background:#f3f3f3}
-.footer-info{margin-top:46px;color:#9b9b9b;font-size:.88rem}
-.site-footer{position:fixed;left:0;right:0;bottom:0;padding:16px 28px;border-top:1px solid rgba(0,0,0,.06);background:rgba(246,246,244,.94);display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:#777}
-.security{display:flex;align-items:center;gap:10px;font-weight:500;color:#555}
-.security svg{width:20px;height:20px}
-.cursor{display:inline-block;width:2px;height:1em;background:#222;animation:b 1s infinite;vertical-align:middle}
-@keyframes b{50%{opacity:0}}
-@media(max-width:700px){.card{padding:36px}h1{letter-spacing:-1px}.site-footer{flex-direction:column;gap:10px;text-align:center}}
+:root {
+  --bg: #f6f6f4;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --text: #181818;
+  --muted: #666666;
+  --line: #e4e4e0;
+  --accent: #2d6cdf;
+  --accent-glow: rgba(45, 108, 223, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Grids & Parallax Blobs */
+.bg-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.grid {
+  position: absolute;
+  inset: -50px;
+  background-image: 
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.5;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.16;
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+
+.b1 { width: 420px; height: 420px; background: #3b82f6; top: -100px; left: -100px; }
+.b2 { width: 380px; height: 380px; background: #f97316; bottom: -80px; right: -80px; }
+.b3 { width: 320px; height: 320px; background: #10b981; top: 45%; left: 55%; }
+
+/* Main Container */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  perspective: 1000px;
+}
+
+.card {
+  max-width: 720px;
+  width: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: clamp(32px, 6vw, 56px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.25s ease;
+  animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.card:hover {
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.07);
+}
+
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Status Indicator */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 50px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 26px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 var(--accent-glow);
+  animation: pulseDot 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 108, 223, 0.4); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(45, 108, 223, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 108, 223, 0); }
+}
+
+h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 1.05rem;
+  max-width: 580px;
+  margin-bottom: 36px;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+button {
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 14px 26px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: #171717;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background: #262626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btn-secondary:hover {
+  background: #f8f8f6;
+  border-color: #d4d4d0;
+  transform: translateY(-2px);
+}
+
+/* Request ID & Meta Info */
+.meta-info {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.request-id {
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.request-id:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text);
+}
+
+/* Footer */
+.site-footer {
+  padding: 20px 32px;
+  border-top: 1px solid var(--line);
+  background: rgba(246, 246, 244, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.security {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.security svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--text);
+  animation: blinkCursor 1s infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+@keyframes blinkCursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Responsive Adjustments */
+@media(max-width: 680px) {
+  main { padding: 16px; }
+  .card { padding: 28px; }
+  .site-footer {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}
 </style>
 </head>
 <body>
-<div class="bg"><div class="grid"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<div class="bg-wrapper">
+  <div class="grid"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
 <main>
-<div class="card">
-<div class="status"><div class="dot"></div><span id="status">Searching<span class="cursor"></span></span></div>
-<h1>This site doesn't exist.</h1> <p>The address you're looking for couldn't be reached. It may have never existed, was removed, or simply jumped out of the browser and ran away.</p>
-<div class="actions">
-<button class="primary" onclick="location.reload()">Try Again</button>
-<button class="secondary" onclick="history.back()">Go Back</button>
-</div>
-<div class="footer-info">Request ID: <span id="rid"></span></div>
-</div>
+  <div class="card" id="interactive-card">
+    <div class="status-badge">
+      <div class="dot"></div>
+      <span id="status-text">Searching route<span class="cursor"></span></span>
+    </div>
+
+    <h1>This site doesn't exist.</h1>
+    <p>The address you're looking for couldn't be reached. It may have never existed, was removed, or simply sprouted legs, jumped out of the browser, and ran away.</p>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="triggerRetry()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.73-5.73"/></svg>
+        Try Again
+      </button>
+      <button class="btn-secondary" onclick="triggerGoBack()">Go Back</button>
+    </div>
+
+    <div class="meta-info">
+      <div>Status: 404 Not Found</div>
+      <div>ID: <span class="request-id" id="rid" title="Click to copy ID" onclick="copyReqId()">SHAHAL-404</span></div>
+    </div>
+  </div>
 </main>
 
 <footer class="site-footer">
-<div>© Shahal Glide 2026</div>
-<div class="security">
-<svg viewBox="0 0 64 64" aria-hidden="true">
-<path fill="#f38020" d="M48.6 29.4c-.6-4.5-4.4-8.2-9.1-8.2-3.3 0-6.2 1.8-7.8 4.6-.9-.5-1.9-.8-3-.8-3.3 0-6 2.7-6 6 0 .2 0 .4.1.6C18.9 32.3 16 35.8 16 40c0 4.8 3.9 8.7 8.7 8.7h25.1c5.1 0 9.2-4.1 9.2-9.2 0-4.8-3.7-8.8-8.4-9.1z"/>
-</svg>
-<span>Secured by Cloudflare</span>
-</div>
+  <div>© Shahal Glide 2026</div>
+  <div class="security">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path fill="#f38020" d="M48.6 29.4c-.6-4.5-4.4-8.2-9.1-8.2-3.3 0-6.2 1.8-7.8 4.6-.9-.5-1.9-.8-3-.8-3.3 0-6 2.7-6 6 0 .2 0 .4.1.6C18.9 32.3 16 35.8 16 40c0 4.8 3.9 8.7 8.7 8.7h25.1c5.1 0 9.2-4.1 9.2-9.2 0-4.8-3.7-8.8-8.4-9.1z"/>
+    </svg>
+    <span>Secured by Cloudflare</span>
+  </div>
 </footer>
 
 <script>
-const msgs=["Searching","Resolving domain","Checking route","No response","Unavailable"];
-let i=0,s=document.getElementById("status");
-setInterval(()=>{i=(i+1)%msgs.length;s.innerHTML=msgs[i]+'<span class="cursor"></span>'},1700);
-document.getElementById("rid").textContent=Math.random().toString(36).substring(2,10).toUpperCase();
-const blobs=document.querySelectorAll(".blob");
-document.addEventListener("mousemove",e=>{
-const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
-blobs.forEach((b,n)=>b.style.transform=`translate(${x*(n+1)*15}px,${y*(n+1)*15}px)`);
+// Dynamic Status Ticker
+const statuses = [
+  "Searching route",
+  "Resolving DNS",
+  "Checking orbit",
+  "No response",
+  "Wandering off"
+];
+let statusIdx = 0;
+const statusEl = document.getElementById("status-text");
+
+setInterval(() => {
+  statusIdx = (statusIdx + 1) % statuses.length;
+  statusEl.innerHTML = statuses[statusIdx] + '<span class="cursor"></span>';
+}, 2200);
+
+// Generate random Request ID
+const ridEl = document.getElementById("rid");
+const randomId = "SHAHAL-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+ridEl.textContent = randomId;
+
+function copyReqId() {
+  navigator.clipboard.writeText(ridEl.textContent);
+  const original = ridEl.textContent;
+  ridEl.textContent = "COPIED!";
+  setTimeout(() => ridEl.textContent = original, 1200);
+}
+
+// Interactive Parallax & 3D Card Tilt (Mouse + Touch / Gyro Support)
+const card = document.getElementById("interactive-card");
+const blobs = document.querySelectorAll(".blob");
+
+let mouseX = 0, mouseY = 0;
+let cardX = 0, cardY = 0;
+
+window.addEventListener("mousemove", (e) => {
+  mouseX = (e.clientX / window.innerWidth) - 0.5;
+  mouseY = (e.clientY / window.innerHeight) - 0.5;
 });
+
+// Mobile gyroscope or touch movement fallback
+window.addEventListener("touchmove", (e) => {
+  if (e.touches.length > 0) {
+    mouseX = (e.touches[0].clientX / window.innerWidth) - 0.5;
+    mouseY = (e.touches[0].clientY / window.innerHeight) - 0.5;
+  }
+}, { passive: true });
+
+function animateParallax() {
+  // Smooth lerp for card tilt
+  cardX += (mouseX * 12 - cardX) * 0.1;
+  cardY += (mouseY * 12 - cardY) * 0.1;
+
+  card.style.transform = `perspective(1000px) rotateX(${-cardY}deg) rotateY(${cardX}deg)`;
+
+  // Parallax shift blobs
+  blobs.forEach((blob, index) => {
+    const factor = (index + 1) * 20;
+    blob.style.transform = `translate(${mouseX * factor}px, ${mouseY * factor}px)`;
+  });
+
+  requestAnimationFrame(animateParallax);
+}
+requestAnimationFrame(animateParallax);
+
+// Interactive Button actions with fun feedback
+function triggerRetry() {
+  const btn = document.querySelector('.btn-primary');
+  btn.style.transform = 'scale(0.95)';
+  setTimeout(() => btn.style.transform = '', 150);
+  
+  const funnyAlerts = [
+    "Still nowhere to be found!",
+    "Nope, it ran even faster.",
+    "Trying harder... Result: 404.",
+    "The hamster running the server took a coffee break."
+  ];
+  const randomMsg = funnyAlerts[Math.floor(Math.random() * funnyAlerts.length)];
+  statusEl.innerHTML = randomMsg + '<span class="cursor"></span>';
+}
+
+function triggerGoBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    alert("There's nowhere else to go! You've reached the edge of the universe.");
+  }
+}
 </script>
+
 </body>
 </html>
