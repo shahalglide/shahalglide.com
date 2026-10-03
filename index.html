@@ -61,7 +61,6 @@ body {
   filter: blur(100px);
   opacity: 0.16;
   will-change: transform;
-  transition: transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1);
 }
 
 .b1 { width: 420px; height: 420px; background: #3b82f6; top: -100px; left: -100px; }
@@ -122,7 +121,6 @@ main {
   height: 8px;
   background: var(--accent);
   border-radius: 50%;
-  box-shadow: 0 0 0 0 var(--accent-glow);
   animation: pulseDot 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
@@ -180,10 +178,6 @@ button {
   background: #262626;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
 }
 
 .btn-secondary {
@@ -251,7 +245,7 @@ button {
 }
 
 .cursor {
-  display: inline-block;
+  display: inline-log;
   width: 2px;
   height: 1em;
   background: var(--text);
@@ -265,7 +259,6 @@ button {
   51%, 100% { opacity: 0; }
 }
 
-/* Responsive Adjustments */
 @media(max-width: 680px) {
   main { padding: 16px; }
   .card { padding: 28px; }
@@ -322,7 +315,6 @@ button {
 </footer>
 
 <script>
-// Dynamic Status Ticker
 const statuses = [
   "Searching route",
   "Resolving DNS",
@@ -338,7 +330,6 @@ setInterval(() => {
   statusEl.innerHTML = statuses[statusIdx] + '<span class="cursor"></span>';
 }, 2200);
 
-// Generate random Request ID
 const ridEl = document.getElementById("rid");
 const randomId = "SHAHAL-" + Math.random().toString(36).substring(2, 8).toUpperCase();
 ridEl.textContent = randomId;
@@ -350,7 +341,6 @@ function copyReqId() {
   setTimeout(() => ridEl.textContent = original, 1200);
 }
 
-// Interactive Parallax & 3D Card Tilt (Mouse + Touch / Gyro Support)
 const card = document.getElementById("interactive-card");
 const blobs = document.querySelectorAll(".blob");
 
@@ -362,7 +352,6 @@ window.addEventListener("mousemove", (e) => {
   mouseY = (e.clientY / window.innerHeight) - 0.5;
 });
 
-// Mobile gyroscope or touch movement fallback
 window.addEventListener("touchmove", (e) => {
   if (e.touches.length > 0) {
     mouseX = (e.touches[0].clientX / window.innerWidth) - 0.5;
@@ -371,13 +360,11 @@ window.addEventListener("touchmove", (e) => {
 }, { passive: true });
 
 function animateParallax() {
-  // Smooth lerp for card tilt
   cardX += (mouseX * 12 - cardX) * 0.1;
   cardY += (mouseY * 12 - cardY) * 0.1;
 
   card.style.transform = `perspective(1000px) rotateX(${-cardY}deg) rotateY(${cardX}deg)`;
 
-  // Parallax shift blobs
   blobs.forEach((blob, index) => {
     const factor = (index + 1) * 20;
     blob.style.transform = `translate(${mouseX * factor}px, ${mouseY * factor}px)`;
@@ -387,7 +374,6 @@ function animateParallax() {
 }
 requestAnimationFrame(animateParallax);
 
-// Interactive Button actions with fun feedback
 function triggerRetry() {
   const btn = document.querySelector('.btn-primary');
   btn.style.transform = 'scale(0.95)';
@@ -397,7 +383,7 @@ function triggerRetry() {
     "Still nowhere to be found!",
     "Nope, it ran even faster.",
     "Trying harder... Result: 404.",
-    "The hamster running the server took a coffee break."
+    "The server hamster took a coffee break."
   ];
   const randomMsg = funnyAlerts[Math.floor(Math.random() * funnyAlerts.length)];
   statusEl.innerHTML = randomMsg + '<span class="cursor"></span>';
